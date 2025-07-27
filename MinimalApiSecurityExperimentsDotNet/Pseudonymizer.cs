@@ -9,7 +9,10 @@ namespace MinimalApiSecurityExperimentsDotNet
 
         public Pseudonymizer(string key)
         {
-            _key = Encoding.UTF8.GetBytes(key);
+            if (!string.IsNullOrWhiteSpace(key))
+            {
+                _key = Encoding.UTF8.GetBytes(key);
+            }
         }
 
         /// <summary>
@@ -20,7 +23,7 @@ namespace MinimalApiSecurityExperimentsDotNet
         /// <returns></returns>
         public string Pseudonymize(string input, bool outputToHexString = true)
         {
-            if (string.IsNullOrEmpty(input))
+            if (string.IsNullOrWhiteSpace(input) || _key == null)
             {
                 return input;
             }
