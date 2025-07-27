@@ -29,6 +29,16 @@ namespace MinimalApiSecurityExperimentsDotNet
             return outputToHexString ? Convert.ToHexString(hash) : Convert.ToBase64String(hash);
         }
 
+        public bool Verify(string input, string pseudonym)
+        {
+            if (string.IsNullOrEmpty(input) || string.IsNullOrEmpty(pseudonym))
+            {
+                return false;
+            }
+            var computedPseudonym = Pseudonymize(input);
+            return computedPseudonym == pseudonym;
+        }
+
     }
 
 }

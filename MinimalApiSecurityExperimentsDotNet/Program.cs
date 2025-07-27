@@ -10,6 +10,10 @@ namespace MinimalApiSecurityExperimentsDotNet
 
             builder.Services.AddControllers();
 
+            // Add Swagger services
+            builder.Services.AddSwaggerGen();
+            builder.Services.AddEndpointsApiExplorer();       
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -18,8 +22,14 @@ namespace MinimalApiSecurityExperimentsDotNet
 
             app.UseAuthorization();
 
-
             app.MapControllers();
+
+            // Enable Swagger middleware 
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
 
             app.MapGet("/guid", () =>
             {
