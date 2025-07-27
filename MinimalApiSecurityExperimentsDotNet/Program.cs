@@ -1,3 +1,6 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
 namespace MinimalApiSecurityExperimentsDotNet
 {
     public class Program
@@ -12,7 +15,10 @@ namespace MinimalApiSecurityExperimentsDotNet
 
             // Add Swagger services
             builder.Services.AddSwaggerGen();
-            builder.Services.AddEndpointsApiExplorer();       
+            builder.Services.AddEndpointsApiExplorer();  
+            
+            // Add KeyVault 
+          
 
             var app = builder.Build();
 
@@ -41,6 +47,20 @@ namespace MinimalApiSecurityExperimentsDotNet
                 var pseudonym = new Pseudonymizer(key).Pseudonymize(value, outputToHexString: true);
                 return Results.Json(pseudonym);
             }); 
+
+            app.MapGet("/pseudonymize/verify", (string? key, string? value, string? pseudonym) =>
+            {
+                var pseudonymizer = new Pseudonymizer(key);
+                var isValid = pseudonymizer.Verify(value, pseudonym);
+                return Results.Json(isValid);
+            });
+
+            app.MapGet("/getkeyvaultsecret", async (string secretName) =>
+            {   
+                var keyvaultRetriever = new KeyVaultSecretRetriever(builder.Configuration);
+                var secret = await keyvaultRetriever.GetSecretAsync(secretName); 
+                return Results.Json(secret);
+            });
 
             app.MapGet("/", () =>
             {
