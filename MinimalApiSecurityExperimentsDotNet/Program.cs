@@ -26,6 +26,12 @@ namespace MinimalApiSecurityExperimentsDotNet
                 return GuidGenerator.CreateCryptographicallySecureGuid();
             });
 
+            app.MapGet("/pseudonymize", (string? key, string? value) =>
+            {
+                var pseudonym = new Pseudonymizer(key).Pseudonymize(value, outputToHexString: true);
+                return Results.Json(pseudonym);
+            }); 
+
             app.MapGet("/", () =>
             {
                 string html = """
@@ -33,6 +39,7 @@ namespace MinimalApiSecurityExperimentsDotNet
                 <ul>
                     <li><a href="/guid">Generate a cryptographically secure GUID</a></li>
                     <li><a href="/otp">Generate a One Time Password (OTP)</a></li> 
+                    <li><a href="/pseudonymize?key=your-secret-key&value=your-value">Pseudonymize a value</a></li>
                 </ul>
                 """;
 
