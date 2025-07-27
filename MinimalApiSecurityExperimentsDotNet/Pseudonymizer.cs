@@ -18,17 +18,17 @@ namespace MinimalApiSecurityExperimentsDotNet
         /// <summary>
         /// Outputs a pseudonymized version of the input string using HMAC SHA256.       
         /// </summary>
-        /// <param name="input"></param>
+        /// <param name="message"></param>
         /// <param name="outputToHexString">Output to hex string if true. If false, base-64 string is returned</param>
         /// <returns></returns>
-        public string Pseudonymize(string input, bool outputToHexString = true)
+        public string? Pseudonymize(string? message, bool outputToHexString = true)
         {
-            if (string.IsNullOrWhiteSpace(input) || _key == null)
+            if (string.IsNullOrWhiteSpace(message) || _key == null)
             {
-                return input;
+                return message;
             }
             using var hmac = new System.Security.Cryptography.HMACSHA256(_key);
-            var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(input));
+            var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(message));
             return outputToHexString ? Convert.ToHexString(hash) : Convert.ToBase64String(hash);
         }
 

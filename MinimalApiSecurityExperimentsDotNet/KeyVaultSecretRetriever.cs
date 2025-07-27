@@ -9,7 +9,7 @@ namespace MinimalApiSecurityExperimentsDotNet
         private readonly IConfiguration _configuration;
         public KeyVaultSecretRetriever(IConfiguration configuration)
         {
-            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _configuration = configuration;
         }
 
         public async Task<KeyVaultSecret>? GetSecretAsync(string secretName)

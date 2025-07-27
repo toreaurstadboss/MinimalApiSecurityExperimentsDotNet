@@ -1,3 +1,4 @@
+using MinimalApiSecurityExperimentsDotNet.Extensions;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -15,10 +16,11 @@ namespace MinimalApiSecurityExperimentsDotNet
 
             // Add Swagger services
             builder.Services.AddSwaggerGen();
-            builder.Services.AddEndpointsApiExplorer();  
-            
-            // Add KeyVault 
-          
+            builder.Services.AddEndpointsApiExplorer();
+
+            // Adding keyvault access via registering PseudonymizerHostedService 
+            builder.Services.AddSingleton<PseudonymizerProvider>();
+            builder.Services.AddHostedService<PseudonymizerHostedService>();  
 
             var app = builder.Build();
 
@@ -55,11 +57,19 @@ namespace MinimalApiSecurityExperimentsDotNet
                 return Results.Json(isValid);
             });
 
+            //Example using the injected singleton PseudonymizerProvider
+
+            app.MapGet("/pseudo", (string? input, PseudonymizerProvider pseudonymizerProvider) => {
+                var pseudonymizer = pseudonymizerProvider.Get();
+                var result = pseudonymizer.Pseudonymize(input); //pseudonymize the input using the inject Pseudonymizer instance. This will use HMAC SHA256 under the hood.
+                return Results.Ok(new { message = input, pseudonym = result });
+            });
+
             app.MapGet("/getkeyvaultsecret", async (string secretName) =>
             {   
                 var keyvaultRetriever = new KeyVaultSecretRetriever(builder.Configuration);
-                var secret = await keyvaultRetriever.GetSecretAsync(secretName); 
-                return Results.Json(secret);
+                var secret = await keyvaultRetriever.GetSecretAsync(secretName);
+                return Results.Json(secret);               
             });
 
             app.MapGet("/", () =>
