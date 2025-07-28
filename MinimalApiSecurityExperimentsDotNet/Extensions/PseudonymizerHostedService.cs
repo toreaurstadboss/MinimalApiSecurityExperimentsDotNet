@@ -1,5 +1,4 @@
-﻿
-using Azure.Security.KeyVault.Secrets;
+﻿using Azure.Security.KeyVault.Secrets;
 
 namespace MinimalApiSecurityExperimentsDotNet.Extensions
 {
