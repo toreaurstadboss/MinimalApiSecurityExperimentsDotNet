@@ -1,4 +1,5 @@
 using MinimalApiSecurityExperimentsDotNet.Extensions;
+using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -42,6 +43,12 @@ namespace MinimalApiSecurityExperimentsDotNet
             app.MapGet("/guid", () =>
             {
                 return GuidGenerator.CreateCryptographicallySecureGuid();
+            });
+
+            app.MapGet("/generatestrongkey", () =>
+            {
+                return HmacSha256KeyGenerator.GenerateStrongKey();
+
             });
 
             app.MapGet("/pseudonymize", (string? key, string? value) =>
