@@ -2,7 +2,7 @@
 
 namespace MinimalApiSecurityExperimentsDotNet
 {
-    
+
     public static class GuidGenerator
     {
 

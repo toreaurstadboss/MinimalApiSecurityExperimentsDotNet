@@ -1,7 +1,4 @@
 using MinimalApiSecurityExperimentsDotNet.Extensions;
-using System.Security.Cryptography;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace MinimalApiSecurityExperimentsDotNet
 {
@@ -21,7 +18,7 @@ namespace MinimalApiSecurityExperimentsDotNet
 
             // Adding keyvault access via registering PseudonymizerHostedService 
             builder.Services.AddSingleton<PseudonymizerProvider>();
-            builder.Services.AddHostedService<PseudonymizerHostedService>();  
+            builder.Services.AddHostedService<PseudonymizerHostedService>();
 
             var app = builder.Build();
 
@@ -55,7 +52,7 @@ namespace MinimalApiSecurityExperimentsDotNet
             {
                 var pseudonym = new Pseudonymizer(key).Pseudonymize(value, outputToHexString: true);
                 return Results.Json(pseudonym);
-            }); 
+            });
 
             app.MapGet("/pseudonymize/verify", (string? key, string? value, string? pseudonym) =>
             {
@@ -66,17 +63,18 @@ namespace MinimalApiSecurityExperimentsDotNet
 
             //Example using the injected singleton PseudonymizerProvider
 
-            app.MapGet("/pseudo", (string? input, PseudonymizerProvider pseudonymizerProvider) => {
+            app.MapGet("/pseudo", (string? input, PseudonymizerProvider pseudonymizerProvider) =>
+            {
                 var pseudonymizer = pseudonymizerProvider.Get();
                 var result = pseudonymizer.Pseudonymize(input); //pseudonymize the input using the inject Pseudonymizer instance. This will use HMAC SHA256 under the hood.
                 return Results.Ok(new { message = input, pseudonym = result });
             });
 
             app.MapGet("/getkeyvaultsecret", async (string secretName) =>
-            {   
+            {
                 var keyvaultRetriever = new KeyVaultSecretRetriever(builder.Configuration);
                 var secret = await keyvaultRetriever.GetSecretAsync(secretName);
-                return Results.Json(secret);               
+                return Results.Json(secret);
             });
 
             app.MapGet("/", () =>

@@ -2,10 +2,10 @@
 
 namespace MinimalApiSecurityExperimentsDotNet
 {
-   
+
     public class Pseudonymizer
     {
-        private readonly byte[] _key;
+        private readonly byte[]? _key;
 
         public Pseudonymizer(string key)
         {

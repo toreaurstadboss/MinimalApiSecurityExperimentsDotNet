@@ -3,7 +3,7 @@ using Azure.Security.KeyVault.Secrets;
 
 namespace MinimalApiSecurityExperimentsDotNet
 {
-    
+
     public class KeyVaultSecretRetriever
     {
         private readonly IConfiguration _configuration;
@@ -26,7 +26,7 @@ namespace MinimalApiSecurityExperimentsDotNet
                 Console.WriteLine($"Error retrieving the secret {secretName}: {ex.Message}");
                 return null;
             }
-        }     
+        }
 
     }
 

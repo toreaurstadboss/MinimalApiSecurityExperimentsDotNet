@@ -3,7 +3,7 @@ using Azure.Security.KeyVault.Secrets;
 
 namespace MinimalApiSecurityExperimentsDotNet.Extensions
 {
-    
+
     public class PseudonymizerHostedService : IHostedService
     {
 
@@ -11,8 +11,8 @@ namespace MinimalApiSecurityExperimentsDotNet.Extensions
 
         public PseudonymizerHostedService(IServiceProvider provider)
         {
-            _provider = provider;            
-        }      
+            _provider = provider;
+        }
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
@@ -25,7 +25,7 @@ namespace MinimalApiSecurityExperimentsDotNet.Extensions
                 throw new InvalidOperationException($"Config '{hmacSha256SecretName}' not is missing.");
             }
             KeyVaultSecret? secret = await keyVaultRetriever.GetSecretAsync(hmacSha256SecretName);
-        
+
             if (secret == null)
             {
                 throw new InvalidOperationException($"Secret '{hmacSha256SecretName}' not found in Key Vault.");
@@ -35,7 +35,7 @@ namespace MinimalApiSecurityExperimentsDotNet.Extensions
 
             // Register the pseudonymizer in the pseudonymizerProvider
             var pseudonymizerProvider = scope.ServiceProvider.GetRequiredService<PseudonymizerProvider>();
-            pseudonymizerProvider.Set(pseudonymizer);            
+            pseudonymizerProvider.Set(pseudonymizer);
         }
 
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;

@@ -3,7 +3,7 @@ using System.Text;
 
 namespace MinimalApiSecurityExperimentsDotNet
 {
-    
+
     public static class OtpGenerator
     {
 

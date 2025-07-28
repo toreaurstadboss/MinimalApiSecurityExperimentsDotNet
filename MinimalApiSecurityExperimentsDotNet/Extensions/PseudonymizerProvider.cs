@@ -1,14 +1,14 @@
 ﻿namespace MinimalApiSecurityExperimentsDotNet.Extensions
 {
-  
+
     public class PseudonymizerProvider
     {
 
-        private Pseudonymizer? _pseudonymizer; 
+        private Pseudonymizer? _pseudonymizer;
 
         public void Set(Pseudonymizer pseudonymizer)
         {
-            _pseudonymizer = pseudonymizer; 
+            _pseudonymizer = pseudonymizer;
         }
 
         public Pseudonymizer Get()
