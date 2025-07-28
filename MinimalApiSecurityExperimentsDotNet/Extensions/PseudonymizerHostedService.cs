@@ -20,6 +20,10 @@ namespace MinimalApiSecurityExperimentsDotNet.Extensions
             var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
             var keyVaultRetriever = new KeyVaultSecretRetriever(config);
             var hmacSha256SecretName = config["AzureKeyVault:HmacSha256SecretName"];
+            if (hmacSha256SecretName == null)
+            {
+                throw new InvalidOperationException($"Config '{hmacSha256SecretName}' not is missing.");
+            }
             KeyVaultSecret? secret = await keyVaultRetriever.GetSecretAsync(hmacSha256SecretName);
         
             if (secret == null)
